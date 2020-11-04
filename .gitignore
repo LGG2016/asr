@@ -1,0 +1,7 @@
+conf/config.ini
+*.txt
+*.log
+*.token
+.idea
+__pycache__
+venv/
