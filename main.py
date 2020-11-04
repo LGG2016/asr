@@ -1,42 +1,26 @@
 from multiprocessing import Pool
 import log
-from configparser import ConfigParser
+import asr
 
-#asr接入类
-import baidu
-import ali
-import xunfei
-import yitu
-
+logger = log.logging.getLogger('main')
 Providers = {'baidu', 'ali', 'xunfei', 'yitu'}
 audioListFile = "./audio/sid.list"
 
-logger = log.logging.getLogger('main')
-conf = ConfigParser()
-conf.read('./conf/config.ini', encoding='UTF-8')
 
-def AsrRegonition(provide):
+def AsrRegonition(provider):
     flist = open(audioListFile, 'r')
     for line in flist:
         pcmfile = line.strip('\n')
-        if provide == "baidu":
-            client = baidu.Http_Client(AppId=conf[provide]['appid'], ApiKey=conf[provide]['apikey'], KeySecret=conf[provide]['keysecret'], AudioFile=pcmfile)
-        elif provide == "ali":
-            client = ali.Http_Client(AppKey=conf[provide]['appkey'], AccessKeyId=conf[provide]['accesskeyid'], AccessKeySecret=conf[provide]['accesskeysecret'], AudioFile=pcmfile)
-        elif provide == "xunfei":
-            client = xunfei.Ws_Client(APPID=conf[provide]['appid'], APIKey=conf[provide]['apikey'], APISecret=conf[provide]['apisecret'], AudioFile=pcmfile)
-        elif provide == "yitu":
-            client = yitu.Http_Client(DevId=conf[provide]['devid'], DevKey=conf[provide]['devkey'], AudioFile=pcmfile)
-        else:
-            print("provide is not support")
+        client = asr.Asr(provider=provider, audioFile=pcmfile)
+        if None == client:
+            logger.error("init asr client failed")
             return
-
         result = client.GetAsrResult()
         if result == "":
-            logger.warning("provide:%s, file:%s, result is null" % (provide, pcmfile))
-        outMsg = ("file:{0}, provide:{1}, result:{2}").format(pcmfile, provide, result)
+            logger.warning("provider:%s, file:%s, result is null" % (provider, pcmfile))
+        outMsg = ("file:{0}, provider:{1}, result:{2}").format(pcmfile, provider, result)
         logger.info(outMsg)
-        outfile = provide + ".txt"
+        outfile = provider + ".txt"
         with open(outfile, 'a+') as out:
             out.write("{0}\n".format(outMsg))
         print(outMsg)
