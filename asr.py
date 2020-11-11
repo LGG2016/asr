@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 import log
+import time
 
 #asr接入类
 import baidu
@@ -21,6 +22,7 @@ class Asr(object):
         if self.Provider == 'baidu':
             self.Client = baidu.Http_Client(AppId=config[self.Provider]['appid'], ApiKey=config[self.Provider]['apikey'],
                                        KeySecret=config[self.Provider]['keysecret'], AudioFile=self.AudioFile)
+            time.sleep(0.3) #百度接口默认2~10并发
         elif self.Provider == 'ali':
             self.Client = ali.Http_Client(AppKey=config[self.Provider]['appkey'], AccessKeyId=config[self.Provider]['accesskeyid'],
                                      AccessKeySecret=config[self.Provider]['accesskeysecret'], AudioFile=self.AudioFile)
