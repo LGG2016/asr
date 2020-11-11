@@ -133,7 +133,7 @@ class Ws_Client(object):
     def on_open(self):
         def run(*args):
             frameSize = 8000  # 每一帧的音频大小
-            intervel = 0.04  # 发送音频间隔(单位:s)
+            intervel = 0.01  # 发送音频间隔(单位:s)
             status = STATUS_FIRST_FRAME  # 音频的状态信息，标识音频是第一帧，还是中间帧、最后一帧
 
             with open(self.AudioFile, "rb") as fp:
@@ -167,7 +167,7 @@ class Ws_Client(object):
                                       "audio": str(base64.b64encode(buf), 'utf-8'),
                                       "encoding": self.Format}}
                         self.ws.send(json.dumps(d))
-                        time.sleep(1)
+                        time.sleep(0.1)
                         break
                     # 模拟音频采样间隔
                     time.sleep(intervel)
