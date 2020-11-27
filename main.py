@@ -3,7 +3,7 @@ import log
 import asr
 
 logger = log.logging.getLogger('main')
-Providers = {'baidu', 'ali', 'xunfei', 'yitu'}
+Providers = {'baidu', 'ali', 'xunfei', 'yitu', 'sbc'}
 audioListFile = "./audio/sid.list"
 
 

@@ -13,3 +13,12 @@ def PcmToWav(indata):
         outdata = file.read()
     os.remove(tmpfile)
     return outdata
+
+def PcmFileToWavFile(pcmfile):
+    wavfile = pcmfile + ".wav"
+    with open(pcmfile, 'rb') as infile:
+        indata = infile.read()
+    with wave.open(wavfile, 'wb') as outfile:
+        outfile.setparams((1, 2, 16000, 0, 'NONE', 'NONE'))
+        outfile.writeframes(indata)
+    return wavfile

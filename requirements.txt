@@ -1,9 +1,15 @@
 aliyun-python-sdk-core==2.13.3
+certifi==2020.11.8
+chardet==3.0.4
 gevent==20.9.0
 greenlet==0.4.17
+idna==2.10
 jmespath==0.10.0
 pycryptodome==3.9.8
+requests==2.25.0
+requests-toolbelt==0.9.1
 six==1.15.0
+urllib3==1.26.2
 websocket==0.2.1
 websocket-client==0.57.0
 zope.event==4.5.0

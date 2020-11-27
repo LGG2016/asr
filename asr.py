@@ -7,6 +7,7 @@ import baidu
 import ali
 import xunfei
 import yitu
+import sbc
 
 logger = log.logging.getLogger('asr')
 config = ConfigParser()
@@ -30,7 +31,11 @@ class Asr(object):
             self.Client = xunfei.Ws_Client(APPID=config[self.Provider]['appid'], APIKey=config[self.Provider]['apikey'],
                                       APISecret=config[self.Provider]['apisecret'], AudioFile=self.AudioFile)
         elif self.Provider == 'yitu':
-            self.Client = yitu.Http_Client(DevId=config[self.Provider]['devid'], DevKey=config[self.Provider]['devkey'], AudioFile=self.AudioFile)
+            self.Client = yitu.Http_Client(DevId=config[self.Provider]['devid'], DevKey=config[self.Provider]['devkey'],
+                                           AudioFile=self.AudioFile)
+        elif self.Provider == 'sbc':
+            self.Client = sbc.Http_Client(ProductId=config[self.Provider]['productid'], PublicKey=config[self.Provider]['publickey'],
+                                          SecretKey=config[self.Provider]['secretkey'], AudioFile=self.AudioFile, )
         else:
             logger.error("provide is not support")
             return ""
