@@ -117,8 +117,7 @@ class Ws_Client(object):
                 logger.info("sid:%s call success!,data is:%s" % (sid, json.dumps(data, ensure_ascii=False)))
                 status = msg["data"]["status"]
                 if status == 2:
-                    self.ws.quit()
-                    self.ws.keep_running = False;
+                    self.ws.teardown()
         except Exception as e:
             logger.error("receive msg,but parse exception: %s, file:%s" % (e, self.AudioFile))
 
