@@ -101,19 +101,24 @@ class Ws_Client(object):
     # 收到websocket消息的处理
     def on_message(self, message):
         try:
-            code = json.loads(message)["code"]
-            sid = json.loads(message)["sid"]
+            msg = json.loads(message)
+            code = msg["code"]
+            sid = msg["sid"]
             if code != 0:
-                errMsg = json.loads(message)["message"]
+                errMsg = msg["message"]
                 logger.error("sid:%s call error:%s code is:%s" % (sid, errMsg, code))
 
             else:
-                data = json.loads(message)["data"]["result"]["ws"]
+                data = msg["data"]["result"]["ws"]
                 logger.info("Recvmsg:%s" % json.dumps(message))
                 for i in data:
                     for w in i["cw"]:
                         self.Result += w["w"]
                 logger.info("sid:%s call success!,data is:%s" % (sid, json.dumps(data, ensure_ascii=False)))
+                status = msg["data"]["status"]
+                if status == 2:
+                    self.ws.quit()
+                    self.ws.keep_running = False;
         except Exception as e:
             logger.error("receive msg,but parse exception: %s, file:%s" % (e, self.AudioFile))
 
@@ -183,7 +188,7 @@ class Ws_Client(object):
         self.ws.on_open = self.on_open
         self.ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
         time2 = datetime.now()
-        logger.info("timecost:%d" % (time2-time1).microseconds)
+        logger.info("timecost:%d.%d" % ((time2-time1).seconds, (time2-time1).microseconds/1000))
     def GetAsrResult(self):
         self.start()
         return self.Result
