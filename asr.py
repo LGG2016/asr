@@ -8,6 +8,7 @@ import ali
 import xunfei
 import yitu
 import sbc
+import tengxun
 
 logger = log.logging.getLogger('asr')
 config = ConfigParser()
@@ -35,7 +36,10 @@ class Asr(object):
                                            AudioFile=self.AudioFile)
         elif self.Provider == 'sbc':
             self.Client = sbc.Http_Client(ProductId=config[self.Provider]['productid'], PublicKey=config[self.Provider]['publickey'],
-                                          SecretKey=config[self.Provider]['secretkey'], AudioFile=self.AudioFile, )
+                                          SecretKey=config[self.Provider]['secretkey'], AudioFile=self.AudioFile)
+        elif self.Provider == 'tengxun':
+            self.Client = tengxun.Http_Client(SecretID=config[self.Provider]['secretid'], SecretKey=config[self.Provider]['secretkey'],
+                                              AudioFile=self.AudioFile)
         else:
             logger.error("provide is not support")
             return ""
