@@ -52,6 +52,8 @@ class Http_Client(object):
             req.Data = content
             req.EngSerViceType = "16k_zh"
             req.VoiceFormat = "wav"
+            req.FilterPunc = 2 #是否过滤标点符号（目前支持中文普通话引擎）。 0：不过滤，1：过滤句末标点，2：过滤所有标点。默认为0。
+            req.ConvertNumMode = 0 #是否进行阿拉伯数字智能转换。0：不转换，直接输出中文数字，1：根据场景智能转换为阿拉伯数字。默认值为1
             resp = client.SentenceRecognition(req)
             logger.info("file:%s, result:%s, sid:%s", self.AudioFile, resp.Result, resp.RequestId)
             return resp.Result
@@ -63,6 +65,6 @@ if __name__ == "__main__":
     audiofile = './audio/16k.pcm'
     conf = ConfigParser()
     conf.read('./conf/config.ini', encoding='UTF-8')
-    client = Http_Client(APPID=conf['tengxun']['appid'], SecretID=conf['tengxun']['secretid'], SecretKey=conf['tengxun']['secretkey'],
+    client = Http_Client(SecretID=conf['tengxun']['secretid'], SecretKey=conf['tengxun']['secretkey'],
                        AudioFile=audiofile, Format='pcm')
     print("file:%s, result:%s" % (audiofile, client.GetAsrResult()))
